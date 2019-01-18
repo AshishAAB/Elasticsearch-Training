@@ -44,7 +44,7 @@ Start the Kibana server:
 
 Check if Elasticsearch is up and running:
 
-curl -XGET < host-name >:9200
+    curl -XGET < host-name >:9200
 
 You should see some JSON output if ES is running.
 
