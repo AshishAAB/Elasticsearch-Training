@@ -46,7 +46,9 @@ Check if Elasticsearch is up and running:
 
 curl -XGET < host-name >:9200
 
+You should see some JSON output if ES is running.
+
 Point your browser to:
 
     http://< host-name >:5601
-This open Kibana. Go to ***Dev Tools*** to get started with elastic queries
+This opens Kibana. Go to ***Dev Tools*** to get started with elastic queries
