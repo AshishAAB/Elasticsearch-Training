@@ -1,0 +1,138 @@
+PUT test
+
+DELETE test
+
+GET test/_settings
+
+PUT test/docs/1
+{
+  "id": 1,
+  "words": "Winter is coming"
+}
+
+GET test/docs/1
+
+PUT test/docs/2
+{
+  "id": 2,
+  "words": "Ours is fury"
+}
+
+PUT test/docs/3
+{
+  "id" :3,
+  "words": "The choice is yours"
+}
+
+GET test/_search
+
+GET test/_search
+{
+  "query": {
+    "match": {
+      "words": "the fury"
+    }
+  }
+}
+
+GET test/_search
+{
+  "query": {
+    "range": {
+      "id": {
+        "gte": 1,
+        "lte": 3
+      }
+    }
+  }
+}
+
+
+#https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-analyzers.html
+POST _analyze
+{
+  "text": "The choice is yours! 3",
+  "analyzer": "keyword"
+}
+#Simple analyzer
+
+POST _analyze
+{
+  "text": "The choice is yours!",
+  "analyzer": "english"
+}
+
+POST _analyze
+{
+  "text": "Winter is coming!"
+  , "analyzer": "whitespace"
+}
+
+PUT my_index
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "autocomplete": {
+          "tokenizer": "autocomplete",
+          "filter": [
+            "lowercase"
+          ]
+        },
+        "autocomplete_search": {
+          "tokenizer": "lowercase"
+        }
+      },
+      "tokenizer": {
+        "autocomplete": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 10,
+          "token_chars": [
+            "letter"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "title": {
+          "type": "text",
+          "analyzer": "autocomplete",
+          "search_analyzer": "autocomplete_search"
+        }
+      }
+    }
+  }
+}
+
+POST my_index/_analyze
+{
+  "text": "Quick Foxes"
+  , "analyzer": "autocomplete"
+}
+
+PUT my_index/_doc/1
+{
+  "title": "Quick Foxes" 
+}
+
+GET my_index/_search
+{
+  "query": {
+    "match": {
+      "title": {
+        "query": "Fo", 
+        "operator": "and"
+      }
+    }
+  }
+}
+
+GET my_index/_analyze 
+{
+  "text": "Quick Foxes", 
+  "analyzer": "autocomplete"
+}
